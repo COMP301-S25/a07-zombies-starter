@@ -26,7 +26,7 @@ public interface IBase {
 Your Base class must implement IBase and include the following functionality:
 
 ### `addSupplies(int amount)`
-The addSupplies method should be `synchronized` so that multiple survivors cannot modify the supply count at the same time. It takes an integer amount representing the number of supplies to add. If the amount is less than or equal to zero, the method should throw an `IllegalArgumentException`. Otherwise, it should increase the total supply count and print a message indicating how many supplies were added and the new total.
+The addSupplies method should be `synchronized` so that multiple survivors cannot modify the supply count at the same time. It takes an integer amount representing the number of supplies to add. If the amount is less than or equal to zero, the method should throw an `IllegalArgumentException`. Otherwise, it should increase the total supply count and print a message indicating how many supplies were added and the new total.  You can get the name of the current caller by using `Thread.currentThread().getName()`.
 
 Example output:
 `Survivor-1 added 5 supplies. Total: 15`
