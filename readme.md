@@ -8,7 +8,7 @@ In this simulation, multiple Survivors will perform tasks asynchronously, intera
 
 You will be provided with two interfaces, IBase and ISurvivor, which define the required functionality for the Base and Survivor classes. Your task is to implement these classes according to the specifications below.
 
-## Novice 
+## Novice
 
 ### Base
 The `Base` class represents the survivors' home, where supplies are stored and tools are used. It must be thread-safe because multiple survivors may interact with it at the same time.
@@ -55,20 +55,20 @@ public interface ISurvivor extends Runnable {
 
 ### Protected methods
 
-In addition to the exposed methods of the interface, the Survivor should be able to perform specific actions to help the community survive. The action methods should throw `InterruptedException`
+In addition to the exposed methods of the interface, the Survivor should be able to perform specific `protected` actions to help the community survive. The action methods should throw `InterruptedException`
 
 - `fortify()`
 - `scavenge()`
 - `rest()`
 - `performAction()` (calls the other actions)
 
-You may create other private methods as you deem necessary, but these must exist as protected (for testing purposes).  
+You may create other private methods as you deem necessary, but these must exist as protected (for testing purposes).
 
 ### `performAction()`
 The performAction method determines what the survivor does at any given moment. This method should randomly select one of three possible actions: scavenging for supplies, fortifying the base, or resting.
 
 ### `fortify()`
-The fortify method represents a survivor using a tool to strengthen the base. This method should call the useTool method of Base with the string "fortification". It should also print a message indicating that the survivor is fortifying the base.
+The fortify method represents a survivor using a tool to strengthen the base. This method should call the useTool method of Base with the string "fortification". It should also print a message indicating that the survivor is fortifying the base and take 2 seconds to complete.
 
 ### `scavenge()`
 The scavenge method represents a survivor searching for supplies. It should print a message indicating that the survivor is scavenging and then sleep for a random amount of time between one and four seconds to simulate the time taken to find supplies. After that, the survivor should add a random number of supplies, between one and ten, to the base.
@@ -99,10 +99,10 @@ This class consists of three methods plus main:
 - **`startSimulation(int numSurvivors)`**: Initializes the base and survivors, then starts each survivor in its own thread.
 - **`simulateDayNightCycle(int milliseconds)`**: Allows the simulation to run for a specified duration before stopping.
 - **`endSimulation()`**: Stops all survivors and ensures that their threads terminate properly.
-- 
+-
 - The **`main()`** method calls these methods in order to run the full simulation.
 
-We are also going to have a few instance variables.  To keep things simple, we are going to make everything static.  There is only one zombieApocalpse, and this is the last base on earth. 
+We are also going to have a few instance variables.  To keep things simple, we are going to make everything static.  There is only one zombieApocalpse, and this is the last base on earth.
 
 Add the following instance variables to this class:
 ```
@@ -164,11 +164,11 @@ After making these additions, the base will be able to participate in the zombie
 
 ## Adding Zombie Attacks to the Survivor Class
 
-If the base is under attack, when the Surivor is finished with their previous action, they should not pick another action.  Instead, they should spend the next 2 seconds (2000 milliseconds) defending the base.  It should print out that the survivor is performing this action.  
+If the base is under attack, when the Surivor is finished with their previous action, they should not pick another action.  Instead, they should spend the next 2 seconds (2000 milliseconds) defending the base.  It should print out that the survivor is performing this action.
 
 ## Adding Zombie Attacks to the Zombie Apocalypse (obviously)
 
-Instead of making the day's events a `QuietDayStrategy`, let's add in some fun.  Replace it with a RandomZombieAttacks strategy, and see how your survivors react.  
+Instead of making the day's events a `QuietDayStrategy`, let's add in some fun.  Replace it with a RandomZombieAttacks strategy, and see how your survivors react.
 
 
 ### Adding a Zombie Attack Strategy
@@ -181,11 +181,11 @@ The total time passed into the method must be used exactly. That means the combi
 
 This method should throw an `InterruptedException`, which is already declared in the method signature. You don’t need to catch it — just let it propagate if it occurs. This makes your method more testable and avoids hiding potential timing issues during execution. When you're finished, your implementation will make sure that the simulation lasts exactly the amount of time requested and that zombie attacks are properly spaced and managed within that period.
 
-Once you’ve implemented the class, you’ll be able to plug it into the simulation by passing it into the `simulateDayNightCycle` method. This design will also allow you to create alternate strategies (days) in the future, such as ones with random timing, different numbers of attacks, etc.  
+Once you’ve implemented the class, you’ll be able to plug it into the simulation by passing it into the `simulateDayNightCycle` method. This design will also allow you to create alternate strategies (days) in the future, such as ones with random timing, different numbers of attacks, etc.
 
-### Make your own day 
+### Make your own day
 
-Finally, you get a chance to bend the future to your wishes.  Make a new strategy called MyDayMyWayStrategy, and decide when and how often zombies will attack that day.  
+Finally, you get a chance to bend the future to your wishes.  Make a new strategy called MyDayMyWayStrategy, and decide when and how often zombies will attack that day.
 
 
 Happy Hunting!
