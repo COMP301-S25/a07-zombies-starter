@@ -1,7 +1,7 @@
 package edu.unc.comp301;
 
-public class Survivor implements ISurvivor{
-    private Base base;
+public class Survivor implements ISurvivor, Runnable{
+    private final Base base;
     private volatile boolean stopFlag;
     public Survivor(Base base){
         this.base = base;
@@ -14,11 +14,13 @@ public class Survivor implements ISurvivor{
     @Override
     public void run() {
         this.stopFlag = false;
-        while(!stopFlag){
+        while(!stopFlag && !Thread.currentThread().isInterrupted()){
             try{
                 this.performAction();
             }catch (InterruptedException e) {
-                this.stop();
+                this.stopFlag = true;
+                Thread.currentThread().interrupt();
+                break;
             }
         }
     }
@@ -36,14 +38,14 @@ public class Survivor implements ISurvivor{
         Thread.sleep(1000);
     }
     protected void scavenge() throws InterruptedException {
-        System.out.println("Survivor is scavenging");
+        System.out.println(Thread.currentThread().getName() + " is scavenging");
         int randomSleep = (int)(Math.random() * 4) + 1;
         Thread.sleep(1000 * randomSleep);
         int randomSupplies = (int)(Math.random() * 10) + 1;
         base.addSupplies(randomSupplies);
     }
     protected void rest() throws InterruptedException {
-        System.out.println("Survivor is taking a sleep");
+        System.out.println(Thread.currentThread().getName() + " is taking a sleep");
         Thread.sleep(2000);
     }
 

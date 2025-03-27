@@ -16,7 +16,7 @@ public class Base implements IBase{
             throw new IllegalArgumentException();
         }
         supplyCount += amount;
-        System.out.println("added " + amount + "supplies. Total: " + supplyCount);
+        System.out.println(Thread.currentThread().getName() + " added " + amount + "supplies. Total: " + supplyCount);
 
     }
 
@@ -29,7 +29,7 @@ public class Base implements IBase{
     public void useTool(String task) {
         lock.lock();
         try{
-            System.out.println("Survivor is using the tool");
+            System.out.println(Thread.currentThread().getName() + " is using the tool");
             System.out.println(task);
             Thread.sleep(1000);
             System.out.println("The tool is no longer in use");
