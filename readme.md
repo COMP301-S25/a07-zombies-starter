@@ -97,7 +97,7 @@ The `ZombieApocalypse` class is responsible for managing the entire survival sim
 This class consists of three methods plus main:
 
 - **`startSimulation(int numSurvivors)`**: Initializes the base and survivors, then starts each survivor in its own thread.
-- **`simulateDayNightCycle(int milliseconds)`**: Allows the simulation to run for a specified duration before stopping.
+- **`simulateDayNightCycle(int milliseconds,IDayStrategy events)`**: Allows the simulation to run for a specified duration before stopping.
 - **`endSimulation()`**: Stops all survivors and ensures that their threads terminate properly.
 -
 - The **`main()`** method calls these methods in order to run the full simulation.
