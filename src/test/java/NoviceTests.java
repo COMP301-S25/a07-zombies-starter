@@ -29,6 +29,7 @@ public class NoviceTests {
         Survivor survivor = new InterruptibleSurvivor(new Base());
         Thread thread = new Thread(survivor);
         thread.start();
+        Thread.sleep(10000);
         assertFalse("Survivor should have exited on interruption", thread.isAlive());
     }
 
@@ -62,6 +63,7 @@ public class NoviceTests {
         Thread thread = new Thread(survivor);
         thread.start();
         thread.interrupt();
+        thread.join();
 
         assertFalse("Thread should no longer be alive", thread.isAlive());
     }

@@ -6,6 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Base implements IBase{
     private int supplyCount;
     private Lock lock;
+    private volatile boolean isUnderAttack;
     public Base(){
         supplyCount = 0;
         lock = new ReentrantLock();
@@ -39,5 +40,18 @@ public class Base implements IBase{
             lock.unlock();
         }
 
+    }
+    public synchronized void startAttack(){
+        this.isUnderAttack = true;
+        System.out.println("Zombies are approaching");
+
+    }
+    public synchronized void endAttack(){
+        this.isUnderAttack = false;
+        System.out.println("The survivors have successfully repelled the zombies.");
+
+    }
+    public synchronized boolean isUnderAttack(){
+        return this.isUnderAttack;
     }
 }
