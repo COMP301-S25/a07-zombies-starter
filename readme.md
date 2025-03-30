@@ -71,7 +71,7 @@ The performAction method determines what the survivor does at any given moment. 
 The fortify method represents a survivor using a tool to strengthen the base. This method should call the useTool method of Base with the string "fortification". It should also print a message indicating that the survivor is fortifying the base and take 2 seconds to complete.
 
 ### `scavenge()`
-The scavenge method represents a survivor searching for supplies. It should print a message indicating that the survivor is scavenging and then sleep for a random amount of time between one and four seconds to simulate the time taken to find supplies. After that, the survivor should add a random number of supplies, between one and ten, to the base.
+The scavenge method represents a survivor searching for supplies. It should print a message indicating that the survivor is scavenging and then sleep for a random amount of time between one and four seconds to simulate the time taken to find supplies. After that, the survivor should add 2 supplies to the base.
 
 ### `rest()`
 The rest method represents a survivor taking a break. It should print a message indicating that the survivor is resting and then sleep for two seconds.
@@ -99,10 +99,9 @@ This class consists of three methods plus main:
 - **`startSimulation(int numSurvivors)`**: Initializes the base and survivors, then starts each survivor in its own thread.
 - **`simulateDayNightCycle(int milliseconds,IDayStrategy events)`**: Allows the simulation to run for a specified duration before stopping.
 - **`endSimulation()`**: Stops all survivors and ensures that their threads terminate properly.
--
 - The **`main()`** method calls these methods in order to run the full simulation.
 
-We are also going to have a few instance variables.  To keep things simple, we are going to make everything static.  There is only one zombieApocalpse, and this is the last base on earth.
+All methods should be public. We are also going to have a few instance variables.  To keep things simple, we are going to make everything static.  There is only one zombieApocalpse, and this is the last base on earth.
 
 Add the following instance variables to this class:
 ```
@@ -110,11 +109,6 @@ Add the following instance variables to this class:
     protected static Survivor[] survivors;
     protected static Thread[] survivorThreads;
 ```
-
-### **`public static void main(String[] args)`**
-
-The `main` method is the entry point of the program. It starts the simulation by calling `startSimulation(5)`, which creates **five survivors**. Then, it calls `simulateDayNightCycle(10000)`, which allows the simulation to continue running for **10 seconds** before stopping. Finally, it calls `endSimulation()` to cleanly stop all survivor threads and exit the program.
-
 
 
 
@@ -127,17 +121,20 @@ For each survivor, the method creates a corresponding thread, assigns it a name 
 
 ### **`private static void simulateDayNightCycle(int milliseconds, IDayStrategy events)`**
 
-This method allows time to pass in the simulation before stopping. We want to begin with a quiet day, so we will inject a QuietDayStrategy object.  Take a look at the given class.  It simply calls `Thread.sleep(milliseconds)`, pausing the main thread while survivor threads continue their actions. If the thread is interrupted during this sleep period, an exception is thrown.
+This method allows time to pass in the simulation before stopping.  Execute the day's strategy.  You will have to give it the `base` and the specified amount of miliseconds for duration. Execute throws an InterruptedException which is a checked exception, so you will have to handle that here.  
 
 
 ### **`private static void endSimulation()`**
 
 This method stops all survivors and ensures their threads terminate properly. First, it prints `"Simulation ending..."`, then loops through all survivors and calls `stop()` on each one, signaling them to exit their run loops.
 
-Next, it loops through all survivor threads and calls `join()`, ensuring that each thread has completely finished before the program exits. If an interruption occurs during this process, the program restores the thread’s interrupted status.
+Next, it loops through all survivor threads and calls `join()`, ensuring that each thread has completely finished before the program exits. 
 
 Once all survivor threads have stopped, it prints `"All survivors have stopped. Simulation over."` and the program terminates cleanly.
 
+### **`public static void main(String[] args)`**
+
+The `main` method is the entry point of the program. It starts the simulation by calling `startSimulation()`then `simulateDayNightCycle()`, and finally `endSimulation()` to cleanly stop all survivor threads and exit the program.  For starters, we suggest creating a simulation with 5 survivors.  You will need to inject a DayStrategy to simulate the day/night cycle.  We suggest creating a day that lasts 10 seconds (10000 miliseconds) and let them have a quiet day by using the given QuietDayStrategy.  Take a look at the given class.  It simply calls `Thread.sleep(milliseconds)`, pausing the main thread while survivor threads continue their actions. If the thread is interrupted during this sleep period, an exception is thrown.  Be sure to end your simulation.
 
 ## Jedi
 
@@ -164,7 +161,7 @@ After making these additions, the base will be able to participate in the zombie
 
 ## Adding Zombie Attacks to the Survivor Class
 
-If the base is under attack, when the Surivor is finished with their previous action, they should not pick another action.  Instead, they should spend the next 2 seconds (2000 milliseconds) defending the base.  It should print out that the survivor is performing this action.
+If the base is under attack, when the Surivor is finished with their previous action, they should not pick another action.  Instead, they should spend the next 2 seconds (2000 milliseconds) defending the base.  Create a boolean flag called defending, as well as getter method called isDefending().  This flag should be set to true when the survivor is fighting the zombies, and you should print out that the survivor is performing this action.  Don't forget to set it back to false when the 2 seconds are up.  
 
 ## Adding Zombie Attacks to the Zombie Apocalypse (obviously)
 
@@ -175,7 +172,7 @@ Instead of making the day's events a `QuietDayStrategy`, let's add in some fun. 
 
 To make the zombie attack portion of your simulation both flexible and testable, you'll be implementing a strategy class that controls when zombie attacks begin and end. This strategy will be used during the day-night cycle of the simulation, and its job is to manage the timing and frequency of zombie attacks in a way that fits within the total time allocated for the simulation. Instead of hardcoding the attack logic directly inside your simulation loop, you'll encapsulate it in a separate class. This will make it easier to test, reuse, and replace with other strategies if needed.
 
-Start by creating a new class that implements the `ZombieAttackStrategy` interface. This interface should already be defined for you and includes a single method called `execute`. The method takes in a `Base` object and an integer representing the total number of milliseconds the simulation should run. Your job is to implement this method so that it triggers exactly two zombie attacks, with each attack taking up a portion of the total simulation time.
+Start by creating a new class that implements the `IDay` interface called `RandomZombieAttackStrategy`. This interface should already be defined for you and includes a single method called `execute`. The method takes in a `Base` object and an integer representing the total number of milliseconds the simulation should run. Your job is to implement this method so that it triggers exactly two zombie attacks, with each attack taking up a portion of the total simulation time.
 
 The total time passed into the method must be used exactly. That means the combination of all attack durations and the gaps between them should add up to the total duration. To achieve this, divide the total time into equal parts for gaps and attacks. Each attack should last for one-fifth of the total duration. The remaining time should be evenly split into three gaps: one before the first attack, one between the two attacks, and one after the second attack. During each gap, the method should sleep. When it’s time for an attack, the method should call `startAttack()` on the base, sleep for the attack duration, and then call `endAttack()`.
 
