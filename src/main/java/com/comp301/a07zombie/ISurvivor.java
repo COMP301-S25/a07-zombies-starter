@@ -1,4 +1,4 @@
-package edu.unc.comp301;
+package com.comp301.a07zombie;
 
 public interface ISurvivor extends Runnable {
   void stop(); // Stops the survivor thread

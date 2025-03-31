@@ -1,4 +1,4 @@
-package edu.unc.comp301;
+package com.comp301.a07zombie;
 
 public interface IBase {
   void addSupplies(int amount); // Adds supplies to the base
