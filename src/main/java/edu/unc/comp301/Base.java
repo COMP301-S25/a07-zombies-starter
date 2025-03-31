@@ -1,6 +1,6 @@
 package edu.unc.comp301;
 
-public class Base implements IBase{
+public class Base implements IBase {
     @Override
     public void addSupplies(int amount) {
 
