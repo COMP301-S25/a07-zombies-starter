@@ -119,12 +119,12 @@ This method sets up the survival environment by initializing the base and creati
 For each survivor, the method creates a corresponding thread, assigns it a name (e.g., `"Survivor-1"`), and starts it. At this point, all survivors begin running concurrently, performing actions asynchronously.
 
 
-### **`private static void simulateDayNightCycle(int milliseconds, IDayStrategy events)`**
+### **`public static void simulateDayNightCycle(int milliseconds, IDayStrategy events)`**
 
 This method allows time to pass in the simulation before stopping.  Execute the day's strategy.  You will have to give it the `base` and the specified amount of miliseconds for duration. Execute throws an InterruptedException which is a checked exception, so you will have to handle that here.  
 
 
-### **`private static void endSimulation()`**
+### **`public static void endSimulation()`**
 
 This method stops all survivors and ensures their threads terminate properly. First, it prints `"Simulation ending..."`, then loops through all survivors and calls `stop()` on each one, signaling them to exit their run loops.
 
@@ -172,7 +172,7 @@ Instead of making the day's events a `QuietDayStrategy`, let's add in some fun. 
 
 To make the zombie attack portion of your simulation both flexible and testable, you'll be implementing a strategy class that controls when zombie attacks begin and end. This strategy will be used during the day-night cycle of the simulation, and its job is to manage the timing and frequency of zombie attacks in a way that fits within the total time allocated for the simulation. Instead of hardcoding the attack logic directly inside your simulation loop, you'll encapsulate it in a separate class. This will make it easier to test, reuse, and replace with other strategies if needed.
 
-Start by creating a new class that implements the `IDay` interface called `RandomZombieAttackStrategy`. This interface should already be defined for you and includes a single method called `execute`. The method takes in a `Base` object and an integer representing the total number of milliseconds the simulation should run. Your job is to implement this method so that it triggers exactly two zombie attacks, with each attack taking up a portion of the total simulation time.
+Start by creating a new class that implements the `IDay` interface called `RandomZombieAttacksStrategy`. This interface should already be defined for you and includes a single method called `execute`. The method takes in a `Base` object and an integer representing the total number of milliseconds the simulation should run. Your job is to implement this method so that it triggers exactly two zombie attacks, with each attack taking up a portion of the total simulation time.
 
 The total time passed into the method must be used exactly. That means the combination of all attack durations and the gaps between them should add up to the total duration. To achieve this, divide the total time into equal parts for gaps and attacks. Each attack should last for one-fifth of the total duration. The remaining time should be evenly split into three gaps: one before the first attack, one between the two attacks, and one after the second attack. During each gap, the method should sleep. When it’s time for an attack, the method should call `startAttack()` on the base, sleep for the attack duration, and then call `endAttack()`.
 
