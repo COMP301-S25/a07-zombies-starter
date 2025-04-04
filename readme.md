@@ -1,4 +1,4 @@
-# a07-survivor
+# a07-zombies
 
 ## Introduction
 
